@@ -10,8 +10,11 @@ def create_app(config_object):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
-    # Import routes/blueprints
-    
+    from polls import routes as poll_routes
+    from admin import routes as admin_routes
+    app.register_blueprint(poll_routes.api_blueprint)
+    app.register_blueprint(poll_routes.frontend_blueprint)
+    app.register_blueprint(admin_routes.admin_blueprint)
 
     db.init_app(app=app)
     migrate.init_app(app=app, db=db)
