@@ -7,7 +7,8 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 class Poll(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    text: Mapped[str] = mapped_column()
+    title: Mapped[str] = mapped_column()
+    description: Mapped[str] = mapped_column()
     started_on: Mapped[datetime.datetime] = mapped_column(default=func.now())
     expires_on: Mapped[datetime.datetime] = mapped_column()
     force_expired: Mapped[bool] = mapped_column(default=False)

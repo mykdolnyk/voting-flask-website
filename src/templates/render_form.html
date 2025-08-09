@@ -1,0 +1,23 @@
+{% for field in form if field.type not in ['HiddenField', 'CSRFTokenField'] %}
+    <div>
+        {% if field.type == 'FieldList' %}
+            {% for subform in field %}
+                {% for subfield in subform %}
+                    <div>
+                        {{ subfield.label }}
+                        {{ subfield }}
+                    </div>  
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            {{field.label}}
+            {{field}}
+        {% endif %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                {{error}}
+            {% endfor %}
+        {% endif %}
+        
+    </div>
+{% endfor %}

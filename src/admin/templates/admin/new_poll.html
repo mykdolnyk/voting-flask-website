@@ -2,10 +2,11 @@
 
 {% block content %}
 <h1>New Poll</h1>
-    <form>
-        <input type="text">
-        <input type="text">
-        <input type="text">
-        <input type="submit">
+    <form action="{{ url_for('admin.new_poll') }}" method='post'>
+        {{ form.hidden_tag() }}
+        {% include 'render_form.html' %}
+        <input type="submit" value="Create">
     </form>
+    <hr>
+
 {% endblock content %}
