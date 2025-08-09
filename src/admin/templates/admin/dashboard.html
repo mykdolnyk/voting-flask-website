@@ -1,0 +1,13 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<h1>PinVote Admin Dashboard</h1>
+
+<a href="{{ url_for('admin.new_poll') }}">New Poll</a>
+
+<div class="admin-poll-list">
+    <ul>
+        <li>Poll Item 1</li>
+    </ul>
+</div>
+{% endblock content %}

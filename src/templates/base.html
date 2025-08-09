@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PinVote{% endblock title %}</title>
+</head>
+<body>
+    {% block header %}
+    <div>
+        <a href="{{ url_for('frontend.current_poll') }}">PinVote</a>
+        <a href="{{ url_for('frontend.poll_archive') }}">Archive</a>
+        <hr>
+    </div>
+    {% endblock header %}
+
+    {% block content %}{% endblock content %}
+</body>
+</html>

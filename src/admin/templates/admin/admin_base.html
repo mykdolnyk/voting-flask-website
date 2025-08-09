@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}PinVote Admin{% endblock title %}
+
+{% block header %}
+<div class="header">
+    <a href="{{ url_for('admin.dashboard') }}">PinVote Admin</a>
+    <a href="{{ url_for('frontend.current_poll') }}">PinVote Website</a>
+</div>
+<hr>
+{% endblock header %}
+
+{% block content %}{% endblock content %}
