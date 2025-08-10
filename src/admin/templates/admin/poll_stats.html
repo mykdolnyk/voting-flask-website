@@ -3,5 +3,20 @@
 {% block content %}
 <h1>Poll Stats</h1>
 
-<p>Stats</p>
+<h2>{{ poll.title }}</h2>
+<a href="{{ url_for('admin.edit_poll', id=poll.id) }}">Edit</a>
+<p> {{ poll.description }} </p>
+
+<p>Started on: {{ poll.started_on }}</p>
+<p>Expires on: {{ poll.expires_on }}</p>
+
+<ul>
+    {% for choice in poll.choices %}
+        <li>
+            {{ choice.text }} - {{ choice.total_votes }}
+            <progress value="{{ choice.total_votes }}" max="{{ poll.total_votes }}"></progress>
+        </li>
+    {% endfor %}
+</ul>
+
 {% endblock content %}

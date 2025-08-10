@@ -1,8 +1,8 @@
 from flask.blueprints import Blueprint
 from config import ADMIN_URL_PREFIX
 from flask.templating import render_template
-from flask import request
-from admin.forms import NewPollForm
+from flask import flash, redirect, request, url_for
+from admin.forms import NewPollForm, EditPollForm
 from polls.models import Poll, Choice
 from app_factory import db
 import datetime
@@ -19,54 +19,130 @@ def auth():
 
 @admin_blueprint.route('/', methods=['GET'])
 def dashboard():
-    return render_template('dashboard.html')
+    context = {}
+
+    context['all_polls'] = Poll.query.order_by(Poll.id.desc()).all()
+    context['active_poll'] = Poll.get_active_poll()
+
+    return render_template('dashboard.html', **context)
 
 
 @admin_blueprint.route('/new-poll', methods=['GET', 'POST'])
 def new_poll():
     context = {}
-    
-    form = NewPollForm(request.form)
-    
-    if request.method == 'GET':
-        context['form'] = form
 
-    else:
+    form = NewPollForm(request.form)
+
+    if request.method == 'GET':
+        pass
+
+    elif request.method == 'POST':
         if form.validate_on_submit():
-            print(form.data)
-            
             expires_on = datetime.datetime.combine(form.expires_on_date.data,
                                                    form.expires_on_time.data)
-            
             try:
                 poll = Poll(title=form.title.data,
                             description=form.description.data,
                             expires_on=expires_on,
-                            hidden=form.hidden.data,
-                            )
+                            hidden=form.hidden.data)
+
+                for choice_data in form.choices.data:
+                    if choice_data['text']:
+                        choice = Choice(text=choice_data['text'])
+                        poll.choices.append(choice)
+
                 db.session.add(poll)
-                
-                for choice_field in form.choices:
-                    choice = Choice(text=choice_field.text.data,
-                                    poll=poll)
-                    db.session.add(choice)
-                
                 db.session.commit()
+
+                flash(render_template('flashes/success.html',
+                                      message='The poll has been successully created.'),
+                      'info')
+                
+                return redirect(url_for('admin.dashboard'))
 
             except Exception:
                 # Todo: Log that somewhere
                 form.form_errors.append('Something went wrong.')
-     
-    context['form'] = form   
+
+    context['form'] = form
     return render_template('new_poll.html', **context)
 
 
 @admin_blueprint.route('/edit-poll/<int:id>', methods=['GET', 'POST'])
 def edit_poll(id: int):
-    return render_template('edit_poll.html')
+    context = {}
+
+    poll: Poll = Poll.query.get(id)
+    choices: Choice = Choice.query.filter(Choice.poll_id == id)
+
+    if request.method == 'GET':
+        form = EditPollForm(title=poll.title,
+                            description=poll.description,
+                            expires_on_date=poll.expires_on.date(),
+                            expires_on_time=poll.expires_on.time(),
+                            hidden=poll.hidden,
+                            force_expired=poll.force_expired,
+                            choices=choices,
+                            )
+
+    elif request.method == 'POST':
+        form = EditPollForm(request.form)
+
+        if form.validate_on_submit():
+            expires_on = datetime.datetime.combine(form.expires_on_date.data,
+                                                   form.expires_on_time.data)
+            try:
+                poll.title = form.title.data
+                poll.description = form.description.data
+                poll.expires_on = expires_on
+                poll.hidden = form.hidden.data
+                poll.force_expired = form.force_expired.data
+
+                for choice_data in form.choices.data:
+                    # If it existed before
+                    if choice_data['id']:
+                        choice: Choice = Choice.query.filter(
+                            Choice.poll == poll, Choice.id == int(choice_data['id'])).first()
+
+                    # If it has not existed but a value has been entered
+                    elif choice_data['text']:
+                        choice = Choice(text=choice_data['text'])
+                        poll.choices.append(choice)
+                        continue
+
+                    # If it has existed before and the text is not empty
+                    if choice_data['text']:
+                        choice.text = choice_data['text']
+
+                    # If it has existed before and the text is empty
+                    elif choice_data['id']:
+                        db.session.delete(choice)
+
+                db.session.commit()
+
+                flash(render_template('flashes/success.html',
+                                      message='The poll has been successully updated.'),
+                      'info')
+
+                return redirect(url_for('admin.poll_stats', id=id))
+
+            except Exception:
+                # Todo: Log that somewhere
+                form.form_errors.append('Something went wrong.')
+                raise
+
+    context['form'] = form
+    context['poll_id'] = id
+
+    return render_template('edit_poll.html', **context)
 
 
 @admin_blueprint.route('/stats/<int:id>', methods=['GET'])
 def poll_stats(id: int):
-    return render_template('poll_stats.html')
+    context = {}
+    
+    poll: Poll = Poll.query.get(id)
+    
+    context['poll'] = poll
 
+    return render_template('poll_stats.html', **context)

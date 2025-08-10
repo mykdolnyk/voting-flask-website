@@ -1,4 +1,4 @@
-from wtforms import BooleanField, DateField, FieldList, Form, FormField, StringField, TimeField
+from wtforms import BooleanField, DateField, FieldList, Form, FormField, HiddenField, StringField, TimeField
 from wtforms import widgets, validators
 from datetime import datetime, date, timedelta
 from flask_wtf import FlaskForm
@@ -14,6 +14,7 @@ class ChoiceFormField(Form):
     text = StringField('Choice', 
                        widget=widgets.TextInput(),
                        validators=(validators.Length(max=128),))
+    id = HiddenField()
 
 
 class NewPollForm(FlaskForm):
@@ -27,4 +28,8 @@ class NewPollForm(FlaskForm):
     expires_on_time = TimeField('Expires at', widget=widgets.TimeInput(), default=now)
     hidden = BooleanField('Hidden', default=False)
     choices = FieldList(FormField(ChoiceFormField, label='Choice'),
-                        label='Choices', min_entries=2)
+                        label='Choices', min_entries=4)
+
+
+class EditPollForm(NewPollForm):
+    force_expired = BooleanField('Force Expired', default=False)

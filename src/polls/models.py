@@ -1,6 +1,6 @@
 import datetime
 from typing import List, Optional
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey, func, select
 from app_factory import db
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
@@ -14,15 +14,33 @@ class Poll(db.Model):
     force_expired: Mapped[bool] = mapped_column(default=False)
     hidden: Mapped[bool] = mapped_column(default=False)
     choices: Mapped[List['Choice']] = relationship(back_populates='poll')
-    
-    
+
+    @property
+    def total_votes(self):
+        total = 0
+
+        for choice in self.choices:
+            total += choice.total_votes
+
+        return total
+
+    @staticmethod
+    def get_active_poll():
+        return Poll.query.filter(Poll.expires_on > datetime.datetime.now(),
+                                 Poll.force_expired == False).first()
+
+
 class Choice(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column()
     poll_id: Mapped[int] = mapped_column(ForeignKey('poll.id'))
     poll: Mapped['Poll'] = relationship(back_populates='choices')
     votes: Mapped[List['Vote']] = relationship(back_populates='choice')
-    
+
+    @property
+    def total_votes(self):
+        return len(self.votes)
+
 
 class Vote(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

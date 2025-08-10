@@ -2,10 +2,8 @@
 
 {% block content %}
 <h1>Edit Poll</h1>
-    <form>
-        <input type="text">
-        <input type="text">
-        <input type="text">
-        <input type="submit">
+    <form action="{{ url_for('admin.edit_poll', id=poll_id) }}" method='post'>
+        {% include 'render_form.html' %}
+        <input type="submit" value="Update">
     </form>
 {% endblock content %}

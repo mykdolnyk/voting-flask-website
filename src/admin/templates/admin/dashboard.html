@@ -5,9 +5,30 @@
 
 <a href="{{ url_for('admin.new_poll') }}">New Poll</a>
 
-<div class="admin-poll-list">
+<div class="admin-active-poll">
+    <h2>Active Poll:</h2>
+    {{ active_poll.title }}
+    <a href="{{ url_for("admin.poll_stats", id=active_poll.id) }}">Stats</a>
+    <a href="{{ url_for("admin.edit_poll", id=active_poll.id) }}">Edit</a>
     <ul>
-        <li>Poll Item 1</li>
+        {% for choice in active_poll.choices %}
+            <li>
+                {{choice.text}}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="admin-poll-list">
+    <h2>All Polls</h2>
+    <ul>
+        {% for poll in all_polls %}
+            <li>
+                {{ poll.title }}
+                <a href="{{ url_for("admin.poll_stats", id=poll.id) }}">Stats</a>
+                <a href="{{ url_for("admin.edit_poll", id=poll.id) }}">Edit</a>
+            </li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock content %}
