@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-This is an Index page.
+
+<h2>{{ poll.title }}</h2>
+<p>{{ poll.description }}</p>
+<form>
+    {% include 'render_form.html' %}
+    <input type="submit" value="Vote">
+</form>
+
 {% endblock content %}

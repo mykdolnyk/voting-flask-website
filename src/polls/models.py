@@ -27,7 +27,8 @@ class Poll(db.Model):
     @staticmethod
     def get_active_poll():
         return Poll.query.filter(Poll.expires_on > datetime.datetime.now(),
-                                 Poll.force_expired == False).first()
+                                 Poll.force_expired == False,
+                                 Poll.hidden == False).first()
 
 
 class Choice(db.Model):
