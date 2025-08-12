@@ -1,9 +1,9 @@
 from flask.blueprints import Blueprint
 from flask.templating import render_template
-from flask import request
+from flask import session
 from polls.forms import PollVotingForm
 from polls.models import Poll
-
+from uuid import uuid4
 
 frontend_blueprint = Blueprint('frontend', __name__, 
                                template_folder='../templates/frontend')
@@ -14,12 +14,20 @@ def current_poll():
     context = {}
     
     poll = Poll.get_active_poll()
-    form = PollVotingForm()
     
-    form.choice.choices = [(choice.id, choice.text) for choice in poll.choices]
+    if poll:
+        form = PollVotingForm()
+        form.choice.choices = [(choice.id, choice.text) for choice in poll.choices]
 
-    context['poll'] = poll
-    context['form'] = form
+        context['poll'] = poll
+        context['form'] = form
+    else:
+        context['poll'] = None
+        context['form'] = None
+    
+    if not session.get('user_id'):
+        session['user_id'] = uuid4()
+        session.permanent = True
     
     return render_template('current_poll.html', **context)
 

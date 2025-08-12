@@ -124,7 +124,7 @@ def edit_poll(id: int):
                                       message='The poll has been successully updated.'),
                       'info')
 
-                return redirect(url_for('admin.poll_stats', id=id))
+                return redirect(url_for('admin.dashboard'))
 
             except Exception:
                 # Todo: Log that somewhere

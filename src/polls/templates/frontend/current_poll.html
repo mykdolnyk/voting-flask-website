@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
 
+{% block js %}
+    {{ super() }}
+    <script>
+        submitVoteUrl = "{{ url_for('api.submit_vote') }}"
+    </script>
+    <script src="{{ url_for('static', filename='js/polls/send-vote.js') }}" defer></script>
+{% endblock js %}
+
 {% block content %}
 
-<h2>{{ poll.title }}</h2>
-<p>{{ poll.description }}</p>
-<form>
-    {% include 'render_form.html' %}
-    <input type="submit" value="Vote">
-</form>
+{% if poll %}
+    <h2>{{ poll.title }}</h2>
+    <p>{{ poll.description }}</p>
+    <form id='voting-form'>
+        {% include 'render_form.html' %}
+        <input type="button" value="Vote" id='voting-form-submit'>
+    </form>
+{% else %}
+    <h2>There is no active poll at the moment.</h2>
+    <p>Check the <a href="{{url_for('frontend.poll_archive')}}">Archive</a> to see the previous polls.</p>
+{% endif %}
 
 {% endblock content %}

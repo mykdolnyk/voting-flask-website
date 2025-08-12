@@ -7,16 +7,20 @@
 
 <div class="admin-active-poll">
     <h2>Active Poll:</h2>
-    {{ active_poll.title }}
-    <a href="{{ url_for("admin.poll_stats", id=active_poll.id) }}">Stats</a>
-    <a href="{{ url_for("admin.edit_poll", id=active_poll.id) }}">Edit</a>
-    <ul>
-        {% for choice in active_poll.choices %}
-            <li>
-                {{choice.text}}
-            </li>
-        {% endfor %}
-    </ul>
+    {% if active_poll %}
+        {{ active_poll.title }}
+        <a href="{{ url_for("admin.poll_stats", id=active_poll.id) }}">Stats</a>
+        <a href="{{ url_for("admin.edit_poll", id=active_poll.id) }}">Edit</a>
+        <ul>
+            {% for choice in active_poll.choices %}
+                <li>
+                    {{choice.text}}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No active polls at the moment
+    {% endif %}
 </div>
 
 <div class="admin-poll-list">

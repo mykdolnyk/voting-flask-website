@@ -1,10 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_hashing import Hashing
 
 
 db = SQLAlchemy()
 migrate = Migrate()
+hashing = Hashing()
+
 
 def create_app(config_object):
     app = Flask(__name__)
@@ -18,6 +21,7 @@ def create_app(config_object):
 
     db.init_app(app=app)
     migrate.init_app(app=app, db=db)
+    hashing.init_app(app=app)
     
     from polls.models import Poll, Choice, Vote
 
