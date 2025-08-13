@@ -1,7 +1,8 @@
 from flask.blueprints import Blueprint
 from flask.templating import render_template
-from flask import session
+from flask import request, session
 from polls.forms import PollVotingForm
+from polls.helpers import voted_before
 from polls.models import Poll
 from uuid import uuid4
 
@@ -21,6 +22,9 @@ def current_poll():
 
         context['poll'] = poll
         context['form'] = form
+        
+        context['voted_before'] = voted_before(request, skip_thumbmark=True)
+        
     else:
         context['poll'] = None
         context['form'] = None
@@ -28,7 +32,7 @@ def current_poll():
     if not session.get('user_id'):
         session['user_id'] = uuid4()
         session.permanent = True
-    
+        
     return render_template('current_poll.html', **context)
 
 

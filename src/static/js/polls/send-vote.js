@@ -20,6 +20,7 @@ async function processSubmission() {
         'body': formData
     })
     if (!response.ok) {
+        displayVoteFail(data)
         throw new Error(`HTTP Error: ${response.status}`);
     }
     const data = await response.json()
@@ -46,18 +47,18 @@ function displayPollResults(data) {
 
     for (choice of data.poll_data.choices) {
         /** @type {DocumentFragment} */
-        let frag = choiceTemplate.content.cloneNode(true)
+        let fragment = choiceTemplate.content.cloneNode(true)
 
-        let newChoice = frag.querySelector('.choice-text')
+        let newChoice = fragment.querySelector('.choice-text')
         newChoice.textContent = choice.text
 
-        let progressbar = frag.querySelector('.progressbar')
+        let progressbar = fragment.querySelector('.progressbar')
         let progressbarBar = progressbar.firstElementChild
 
         votePercent = (choice.total_votes / data.poll_data.total_votes) * 100
         progressbarBar.style.width = `${votePercent}%`
 
-        pollResultsBlock.appendChild(frag)
+        pollResultsBlock.appendChild(fragment)
         }
 }   
 

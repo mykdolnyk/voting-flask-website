@@ -72,7 +72,7 @@ def new_poll():
 def edit_poll(id: int):
     context = {}
 
-    poll: Poll = Poll.query.get(id)
+    poll: Poll = Poll.query.get_or_404(id)
     choices: Choice = Choice.query.filter(Choice.poll_id == id)
 
     if request.method == 'GET':
@@ -141,7 +141,7 @@ def edit_poll(id: int):
 def poll_stats(id: int):
     context = {}
     
-    poll: Poll = Poll.query.get(id)
+    poll: Poll = Poll.query.get_or_404(id)
     
     context['poll'] = poll
 

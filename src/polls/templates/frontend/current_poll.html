@@ -13,10 +13,15 @@
 {% if poll %}
     <h2>{{ poll.title }}</h2>
     <p>{{ poll.description }}</p>
-    <form id='voting-form'>
-        {% include 'render_form.html' %}
+    {% if not voted_before %}
+        <form id='voting-form'>
+            {% include 'render_form.html' %}
         <input type="button" value="Vote" id='voting-form-submit'>
     </form>
+    {% else %}
+        <p>You have voted before.</p>
+    {% endif %}
+
 
     <div class="poll-results" id="poll-results" style="display: block;">
         <template id="choice-template">
