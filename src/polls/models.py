@@ -1,6 +1,6 @@
 import datetime
 from typing import List, Optional
-from sqlalchemy import ForeignKey, func, select
+from sqlalchemy import ForeignKey, func
 from app_factory import db
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
@@ -25,7 +25,7 @@ class Poll(db.Model):
         return total
 
     @staticmethod
-    def get_active_poll():
+    def get_active_poll() -> 'Poll':
         return Poll.query.filter(Poll.expires_on > datetime.datetime.now(),
                                  Poll.force_expired == False,
                                  Poll.hidden == False).first()
@@ -40,15 +40,21 @@ class Choice(db.Model):
 
     @property
     def total_votes(self):
-        return len(self.votes)
+        result = db.session.query(func.count(Vote.id)).filter(
+            Vote.choice == self,
+            Vote.failed == False
+        ).scalar()
+
+        return result
 
 
 class Vote(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    choice_id: Mapped[int] = mapped_column(ForeignKey('choice.id'))
+    choice_id: Mapped[Optional[int]] = mapped_column(ForeignKey('choice.id'), nullable=True)
     choice: Mapped['Choice'] = relationship(back_populates='votes')
     cast_on: Mapped[datetime.datetime] = mapped_column(default=func.now())
     comment: Mapped[Optional[str]] = mapped_column()
     ip_hash: Mapped[str] = mapped_column()
     fingerprint: Mapped[str] = mapped_column()
     user_id: Mapped[str] = mapped_column()
+    failed: Mapped[bool] = mapped_column(default=False)

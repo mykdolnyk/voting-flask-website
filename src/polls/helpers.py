@@ -1,6 +1,6 @@
 import json
 from flask import Request, request, session
-from polls.models import Poll, Vote
+from polls.models import Choice, Poll, Vote
 from app_factory import hashing
 
 
@@ -36,12 +36,19 @@ def verify_vote(request: Request) -> bool:
     except (TypeError, KeyError):
         return False
 
-    active_poll_choices_id = [choice.id for choice in Poll.get_active_poll().choices]
-    
+    # Check if the provided poll and choice values are valid 
+    poll = Poll.get_active_poll() 
+    choice: Choice = Choice.query.filter(
+        Choice.poll == poll,
+        Choice.id == int(request.form.get('choice'))).scalar()
+    if not poll or not choice:
+        return False
+
+    # Check if the user with the same details have already voted in a currently active poll
+    active_poll_choices_id = [choice.id for choice in poll.choices]
     same_origin_votes = (Vote.query.filter(
         (Vote.ip_hash == ip_hash) | (Vote.user_id == user_id) | (Vote.fingerprint == fingerprint))
         .filter(Vote.choice_id.in_(active_poll_choices_id)))
-
     if same_origin_votes.first() is not None:
         return False
 
