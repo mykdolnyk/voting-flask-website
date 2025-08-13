@@ -17,9 +17,21 @@
         {% include 'render_form.html' %}
         <input type="button" value="Vote" id='voting-form-submit'>
     </form>
+
+    <div class="poll-results" id="poll-results" style="display: block;">
+        <template id="choice-template">
+            <div class="choice-block">
+                <p class="choice-text">Placeholder</p>
+                <div class="progressbar">
+                    <div></div>
+                </div>
+            </div>
+        </template>
+    </div>
 {% else %}
     <h2>There is no active poll at the moment.</h2>
     <p>Check the <a href="{{url_for('frontend.poll_archive')}}">Archive</a> to see the previous polls.</p>
 {% endif %}
+
 
 {% endblock content %}
