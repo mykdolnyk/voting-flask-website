@@ -1,4 +1,4 @@
-from wtforms import BooleanField, DateField, FieldList, Form, FormField, HiddenField, StringField, TimeField
+from wtforms import BooleanField, DateField, FieldList, Form, FormField, HiddenField, PasswordField, StringField, TimeField
 from wtforms import widgets, validators
 from datetime import datetime, date, timedelta
 from flask_wtf import FlaskForm
@@ -33,3 +33,8 @@ class NewPollForm(FlaskForm):
 
 class EditPollForm(NewPollForm):
     force_expired = BooleanField('Force Expired', default=False)
+    
+    
+class LoginForm(FlaskForm):
+    username = StringField('Username')
+    password = PasswordField('Password')

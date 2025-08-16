@@ -1,5 +1,6 @@
 import datetime
 from typing import List, Optional
+from flask_login import UserMixin
 from sqlalchemy import ForeignKey, func
 from app_factory import db
 from sqlalchemy.orm import mapped_column, Mapped, relationship
@@ -58,3 +59,10 @@ class Vote(db.Model):
     fingerprint: Mapped[str] = mapped_column()
     user_id: Mapped[str] = mapped_column()
     failed: Mapped[bool] = mapped_column(default=False)
+
+
+class User(db.Model, UserMixin):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(unique=True)
+    password: Mapped[str] = mapped_column()
+    is_superuser: Mapped[bool] = mapped_column(default=False)

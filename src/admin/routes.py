@@ -1,23 +1,47 @@
-from flask.blueprints import Blueprint
-from config import ADMIN_URL_PREFIX
-from flask.templating import render_template
-from flask import flash, redirect, request, url_for
-from admin.forms import NewPollForm, EditPollForm
-from polls.models import Poll, Choice
-from app_factory import db
 import datetime
+from flask import flash, redirect, request, url_for
+from flask.blueprints import Blueprint
+from flask.templating import render_template
+from flask_login import login_user
+from admin.helpers import superuser_only
+from config import ADMIN_URL_PREFIX
+from admin.forms import LoginForm, NewPollForm, EditPollForm
+from polls.models import Poll, Choice, User
+from app_factory import db
+from werkzeug.security import check_password_hash
 
 admin_blueprint = Blueprint('admin', __name__,
                             url_prefix=ADMIN_URL_PREFIX,
                             template_folder='templates/admin')
 
 
-@admin_blueprint.route('/auth', methods=['POST'])
+@admin_blueprint.route('/auth', methods=['GET', 'POST'])
 def auth():
-    return "This is an Admin Auth page."
+    context = {}
+    if request.method == 'GET':
+        form = LoginForm()
+        context['form'] = form
+        return render_template('auth_page.html', **context)
+    
+    elif request.method == 'POST':
+        form = LoginForm(request.form)
+        context['form'] = form
+        
+        user: User = User.query.filter(User.username == form.username.data).first()
+        
+        if form.validate_on_submit():
+            if user and check_password_hash(user.password, form.password.data):
+                login_user(user, remember=False)
+                flash('Successful login.', category='info')
+                return redirect(url_for('admin.dashboard'))
+            else:
+                form.form_errors.append('Incorrect credentials.')
+
+        return render_template('auth_page.html', **context)
 
 
 @admin_blueprint.route('/', methods=['GET'])
+@superuser_only
 def dashboard():
     context = {}
 
@@ -28,6 +52,7 @@ def dashboard():
 
 
 @admin_blueprint.route('/new-poll', methods=['GET', 'POST'])
+@superuser_only
 def new_poll():
     context = {}
 
@@ -69,6 +94,7 @@ def new_poll():
 
 
 @admin_blueprint.route('/edit-poll/<int:id>', methods=['GET', 'POST'])
+@superuser_only
 def edit_poll(id: int):
     context = {}
 
@@ -138,6 +164,7 @@ def edit_poll(id: int):
 
 
 @admin_blueprint.route('/stats/<int:id>', methods=['GET'])
+@superuser_only
 def poll_stats(id: int):
     context = {}
     
