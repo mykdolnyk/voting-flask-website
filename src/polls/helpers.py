@@ -62,7 +62,7 @@ def voted_before(request: Request, skip_thumbmark=False) -> bool:
     if not skip_thumbmark:
         fingerprint = json.loads(request.form['tm'])['thumbmark']
     ip_hash = hashing.hash_value(get_ip_address())
-    user_id = str(session['user_id'])
+    user_id = str(session.get('user_id'))
 
     active_poll_choices_id = [choice.id for choice in Poll.get_active_poll().choices]
     

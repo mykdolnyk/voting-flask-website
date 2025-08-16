@@ -2,7 +2,7 @@ import datetime
 from flask import flash, redirect, request, url_for
 from flask.blueprints import Blueprint
 from flask.templating import render_template
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from admin.helpers import superuser_only
 from config import ADMIN_URL_PREFIX
 from admin.forms import LoginForm, NewPollForm, EditPollForm
@@ -38,6 +38,13 @@ def auth():
                 form.form_errors.append('Incorrect credentials.')
 
         return render_template('auth_page.html', **context)
+
+
+@admin_blueprint.route('/de-auth/', methods=['GET'])
+@superuser_only
+def de_auth():
+    logout_user()
+    return redirect(url_for('frontend.current_poll'))
 
 
 @admin_blueprint.route('/', methods=['GET'])
