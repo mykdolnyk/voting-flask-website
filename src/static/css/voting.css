@@ -1,0 +1,59 @@
+
+.voting-container {
+    display: flex;
+    justify-content: center;
+}
+
+.voting-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    padding: 40px;
+    margin: 25px;
+
+    width: 40%;
+
+    border-radius: 15px;
+    background-color: rgb(84, 146, 65);
+    box-shadow: rgba(0, 0, 0, 0.514) 0px 1px 10px;
+}
+
+.choice-box {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+}
+
+.voting-container h2 {
+    margin: 0;
+}
+
+.voting-container button {
+    width: fit-content;
+    padding: 8px 15px;
+
+    color: var(--font-color);
+    font-size: large;
+
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(29, 114, 21);
+
+    background-color: rgb(40, 160, 29);
+
+    transition: background-color 0.15s;
+
+    align-self: center;
+}
+
+.voting-container button:hover {
+    background-color: #48ad19;
+}
+
+.voting-container button:active {
+    background-color: rgb(64, 194, 12);
+    transition: background-color 0.05s;
+}

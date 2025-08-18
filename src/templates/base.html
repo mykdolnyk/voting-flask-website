@@ -3,18 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/style.css") }}">
+    <link rel="shortcut icon" href="{{ url_for("static", filename='media/favicon.ico') }}" type="image/x-icon">
     <title>{% block title %}PinVote{% endblock title %}</title>
     {% block js %}{% endblock js %}
 </head>
 <body>
     {% block header %}
-    <div>
-        <a href="{{ url_for('frontend.current_poll') }}">PinVote</a>
-        <a href="{{ url_for('frontend.poll_archive') }}">Archive</a>
-        <hr>
-    </div>
+        <header>
+            <span></span>
+            <span class="logo">
+                <img src="{{ url_for("static", filename='media/logo.png') }}" alt="PinVote Logo">
+                <a href="{{ url_for('frontend.current_poll') }}">PinVote</a>
+            </span>
+            <a href="{{ url_for('frontend.poll_archive') }}">Archive</a>
+        </header>
     {% endblock header %}
 
-    {% block content %}{% endblock content %}
+    <main>
+        {% block content %}{% endblock content %}
+
+        <section class="flash flash-blue">
+            <button class="flash-close">X</button>
+            <h3>{{ flash }}</h3>
+            <p>{{ flash }}</p>
+        </section>
+    </main>
 </body>
 </html>

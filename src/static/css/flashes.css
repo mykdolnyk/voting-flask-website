@@ -1,0 +1,55 @@
+
+.flash {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    padding: 10px 20px;
+
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+
+    transition: opacity 0.5s;
+
+    box-shadow: rgba(0, 0, 0, 0.363) 1px 1px 5px;
+
+    display: none;
+    opacity: 0%;
+}
+
+.flash-close {
+    box-sizing: content-box;
+    height: 20px;
+    width: 10px;
+    
+    background-color: inherit;
+    border-color: inherit;
+    color: inherit;
+
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    position: absolute;
+    right: 15px;
+}
+
+.flash-close:hover {
+    transition: filter 0.2s;
+    filter: brightness(1.2);
+}
+
+.flash-close:active {
+    transition: filter 0.2s;
+    filter: saturate(1.5);
+}
+
+.flash-red {
+    background-color: rgba(255, 0, 0, 0.795);
+    border-color: brown;
+}
+
+.flash-blue {
+    background-color: rgba(0, 140, 255, 0.795);
+    border-color: rgb(0, 89, 255);
+}

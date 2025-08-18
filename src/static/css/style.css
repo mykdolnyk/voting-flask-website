@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Nata+Sans:wght@100..900&display=swap');
+@import url(flashes.css);
+@import url(header.css);
+@import url(voting.css);
+
+:root {
+    --font-color: antiquewhite;
+    --progressbar-color: rgb(66, 187, 41);
+}
+
+body {
+    margin: 0;
+    color: var(--font-color);
+    font-family: "Nata Sans", sans-serif;
+}
+
+body {
+    background-color: rgb(92, 155, 53);
+}
+
+a {
+    color: var(--font-color);
+    font-weight: 600;
+}
+
+
+.progressbar {
+    background-color: rgb(37, 97, 42);
+    height: 1.8rem;
+    width: 100%;
+
+    border-radius: 5px;
+    border-style: inset;
+    border-width: 1px;
+    border-color: rgb(84, 146, 65);
+    overflow: hidden;
+    transition: width 0.15s;
+}
+
+.progressbar > div {
+    background-color: var(--progressbar-color);
+    width: min-content;
+    height: 100%;
+
+    box-shadow: var(--progressbar-color) 2px 0px 5px;
+
+    transition: width 0.5s;
+}
