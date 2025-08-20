@@ -34,7 +34,7 @@ a {
     border-width: 1px;
     border-color: rgb(84, 146, 65);
     overflow: hidden;
-    transition: width 0.15s;
+    transition: height 0.5s;
 }
 
 .progressbar > div {
@@ -44,5 +44,12 @@ a {
 
     box-shadow: var(--progressbar-color) 2px 0px 5px;
 
-    transition: width 0.5s;
+    transition: width 1s;
+}
+
+.hidden {
+    height: 0px;
+    border: 0px;
+
+    transition: height 0.5s;
 }

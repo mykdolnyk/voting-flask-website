@@ -1,7 +1,11 @@
 
 .voting-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+
+    padding: 25px;
 }
 
 .voting-container form {
@@ -10,7 +14,6 @@
     gap: 10px;
 
     padding: 40px;
-    margin: 25px;
 
     width: 40%;
 
@@ -30,7 +33,7 @@
     margin: 0;
 }
 
-.voting-container button {
+.voting-container button, input[type='button'] {
     width: fit-content;
     padding: 8px 15px;
 
@@ -49,11 +52,11 @@
     align-self: center;
 }
 
-.voting-container button:hover {
+.voting-container button:hover, input[type='button']:hover {
     background-color: #48ad19;
 }
 
-.voting-container button:active {
+.voting-container button:active, input[type='button']:active {
     background-color: rgb(64, 194, 12);
     transition: background-color 0.05s;
 }

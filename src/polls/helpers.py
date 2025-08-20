@@ -16,6 +16,7 @@ def extract_public_poll_info(poll: Poll):
 
     choices = [
         {
+            'id': choice.id,
             'text': choice.text,
             'total_votes': choice.total_votes
         } for choice in (poll.choices)
@@ -28,11 +29,11 @@ def extract_public_poll_info(poll: Poll):
 
 def verify_vote(request: Request) -> bool:
     try:
-        voted = voted_before()
+        voted = voted_before(request)
+        malformed = False
     except (TypeError, KeyError, json.JSONDecodeError):
         voted = None
         malformed = True
-        
     if voted or malformed:
         return False
 

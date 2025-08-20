@@ -4,7 +4,7 @@
     <div>
         {% if field.type == 'FieldList' %}
             {% for subform in field %}
-                {% for subfield in subform if subfield.type %}
+                {% for subfield in subform %}
                     <div>
                         {% if subfield.type not in ['HiddenField', 'CSRFTokenField'] %}
                             {{ subfield.label }}
@@ -15,9 +15,16 @@
                     </div>  
                 {% endfor %}
             {% endfor %}
+        {% elif field.type == 'RadioField' %}
+            {% for subfield in field %}
+                <div>
+                    {{ subfield }}
+                    {{ subfield.label }}
+                </div>  
+            {% endfor %}
         {% else %}
-            {{field.label}}
-            {{field}}
+            {{ field.label }}
+            {{ field }}
         {% endif %}
         {% if field.errors %}
             {% for error in field.errors %}

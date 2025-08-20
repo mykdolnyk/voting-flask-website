@@ -24,6 +24,7 @@ async function processSubmission() {
         throw new Error(`HTTP Error: ${response.status}`);
     }
     const data = await response.json()
+    console.log(data)
     if (data.success) {
         displayPollResults(data)
     }
@@ -40,26 +41,24 @@ async function createThumb() {
 }
 
 function displaySubmission() {
-    votingForm.style.display = 'None'
+    submitButton.style.display = 'none'
 }
 
 function displayPollResults(data) {
 
     for (choice of data.poll_data.choices) {
-        /** @type {DocumentFragment} */
-        let fragment = choiceTemplate.content.cloneNode(true)
-
-        let newChoice = fragment.querySelector('.choice-text')
-        newChoice.textContent = choice.text
-
-        let progressbar = fragment.querySelector('.progressbar')
+        // Use correct attribute selector syntax
+        let progressbar = document.getElementById(`progressbar-${choice.id}`)
         let progressbarBar = progressbar.firstElementChild
+        let radioInput = document.querySelector(`input[type="radio"][value="${choice.id}"]`)
+
+        radioInput.style.display = 'none'
 
         votePercent = (choice.total_votes / data.poll_data.total_votes) * 100
         progressbarBar.style.width = `${votePercent}%`
 
-        pollResultsBlock.appendChild(fragment)
-        }
+        progressbar.classList.remove('hidden')
+    }
 }   
 
 function displayVoteFail(data) {

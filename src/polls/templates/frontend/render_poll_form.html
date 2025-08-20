@@ -1,0 +1,32 @@
+{{ form.hidden_tag() }}
+
+{% for field in form if field.type not in ['HiddenField', 'CSRFTokenField'] %}
+    <div>
+        {% if field.type == 'RadioField' %}
+            {% for subfield in field %}
+                <div class="choice-box">
+                    <div class="choice-input">
+                        {{ subfield }}
+                        {{ subfield.label }}
+                    </div>
+                    <div class="hidden progressbar" id='progressbar-{{subfield.data}}'>
+                        <div></div>
+                    </div>  
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ field.label }}
+            {{ field }}
+        {% endif %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                {{error}}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endfor %}
+<ul>
+    {% for error in form.form_errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+</ul>

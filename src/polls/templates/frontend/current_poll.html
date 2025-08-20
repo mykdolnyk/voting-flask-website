@@ -9,34 +9,25 @@
 {% endblock js %}
 
 {% block content %}
+<section class="voting-container">
 
-{% if poll %}
-    <h2>{{ poll.title }}</h2>
-    <p>{{ poll.description }}</p>
-    {% if not voted_before %}
-        <form id='voting-form'>
-            {% include 'render_form.html' %}
-        <input type="button" value="Vote" id='voting-form-submit'>
-    </form>
+    {% if poll %}
+        {% if not voted_before %}
+            <form id='voting-form'>
+                <h2>{{ poll.title }}</h2>
+                <p>{{ poll.description }}</p>
+                {% with radio_box_class='choice-input' %}
+                    {% include 'render_poll_form.html' %}
+                {% endwith %}
+                <input type="button" value="Vote" id='voting-form-submit'>
+            </form>
+        {% else %}
+            <p>You have voted before.</p>
+        {% endif %}
     {% else %}
-        <p>You have voted before.</p>
+        <h2>There is no active poll at the moment.</h2>
+        <p>Check the <a href="{{url_for('frontend.poll_archive')}}">Archive</a> to see the previous polls.</p>
     {% endif %}
 
-
-    <div class="poll-results" id="poll-results" style="display: block;">
-        <template id="choice-template">
-            <div class="choice-block">
-                <p class="choice-text">Placeholder</p>
-                <div class="progressbar">
-                    <div></div>
-                </div>
-            </div>
-        </template>
-    </div>
-{% else %}
-    <h2>There is no active poll at the moment.</h2>
-    <p>Check the <a href="{{url_for('frontend.poll_archive')}}">Archive</a> to see the previous polls.</p>
-{% endif %}
-
-
+</section>
 {% endblock content %}
