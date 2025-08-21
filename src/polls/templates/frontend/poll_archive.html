@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Poll Archive</h1>
+<div class="poll-list-container">
+    <h1>Poll Archive</h1>
+    <section class="poll-list">
+        {% for poll in poll_list %}
+            <div class="poll-card">
+                <span class="poll-title">
+                    {{ poll.title }}
+                </span>
+                <div class="poll-winner-info">
+                    <p>👑</p>
+                    <p class="poll-winner">
+                        {{ poll.current_winner.text }}
+                    </p>
+                </div>
+                <div class="poll-stats">
+                    <p>Total votes: <span>{{ poll.total_votes }}</span></p>
+                    <p>Ended on: {{ poll.expires_on }}</p>
+                </div>
+                <a href="{{ url_for("frontend.poll_results", id=poll.id) }}" class="button">Check</a>
+            </div>
+        {% endfor %}
+    </section>
+</div>
 {% endblock content %}

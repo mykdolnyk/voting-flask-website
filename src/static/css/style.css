@@ -2,6 +2,7 @@
 @import url(flashes.css);
 @import url(header.css);
 @import url(voting.css);
+@import url(archive.css);
 
 :root {
     --font-color: antiquewhite;
@@ -52,4 +53,29 @@ a {
     border: 0px;
 
     transition: height 0.5s;
+}
+
+.button {
+    background-color: rgb(29, 149, 51);
+
+    border-color: rgb(19, 106, 35);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    
+    text-decoration: none;
+    font-weight: 600px;
+    padding: 5px;
+
+    transition: background-color 0.15s;
+}
+
+.button:hover {
+    transition: filter 0.2s;
+    filter: brightness(1.1);
+}
+
+.button:active {
+    transition: filter 0.2s;
+    filter: saturate(1.1)
 }

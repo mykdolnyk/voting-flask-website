@@ -1,0 +1,47 @@
+.poll-list-container {
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    width: 100%;
+}
+
+.poll-list {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    align-self: flex-start;
+    justify-content: space-around;
+
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, 300px);
+
+    row-gap: 30px;
+    column-gap: 30px;
+    
+    background-color: rgba(20, 79, 33, 0.219);
+    border-radius: 30px;
+}
+
+.poll-card {
+    background-color: rgb(68, 159, 53);
+    padding: 20px;
+
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.163);
+}
+
+.poll-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.poll-winner-info {
+    display: flex;
+}
+
+.poll-stats{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
