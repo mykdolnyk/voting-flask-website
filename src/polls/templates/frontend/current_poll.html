@@ -13,16 +13,35 @@
 
     {% if poll %}
         {% if not voted_before %}
-            <form id='voting-form'>
-                <h2>{{ poll.title }}</h2>
-                <p>{{ poll.description }}</p>
-                {% with radio_box_class='choice-input' %}
-                    {% include 'render_poll_form.html' %}
-                {% endwith %}
-                <input type="button" value="Vote" id='voting-form-submit'>
-            </form>
+            <div class='window-background'>
+                <form id='voting-form'>
+                    <h2>{{ poll.title }}</h2>
+                    <p>{{ poll.description }}</p>
+                    {% with radio_box_class='choice-input' %}
+                        {% include 'render_poll_form.html' %}
+                    {% endwith %}
+                    <input type="button" value="Vote" id='voting-form-submit'>
+                </form>
+            </div>
         {% else %}
-            <p>You have voted before.</p>
+            <div class='window-background'>
+                <form>
+                    <h2>{{ poll.title }}</h2>
+                    <p>{{ poll.description }}</p>
+                    {% for choice in poll.choices %}
+                        <div class="choice-box">
+                            <div>
+                                <span class="vote-percent">{{choice.current_percent|int}}%</span>
+                                {{ choice.text }}
+                            </div>
+                            <div class="progressbar">
+                                <div style="width: {{choice.current_percent}}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <p>Thank you for your vote!</p>
         {% endif %}
     {% else %}
         <h2>There is no active poll at the moment.</h2>

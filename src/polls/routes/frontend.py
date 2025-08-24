@@ -44,5 +44,5 @@ def poll_archive():
 
 @frontend_blueprint.route('/archive/<int:id>', methods=['GET'])
 def poll_results(id: int):
-    poll_title = Poll.query.get_or_404(id).title
-    return render_template('poll_results.html', poll_title=poll_title)
+    poll = Poll.query.get_or_404(id)
+    return render_template('poll_results.html', poll=poll)

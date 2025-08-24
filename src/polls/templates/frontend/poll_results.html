@@ -1,5 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1> {{ poll_title }} </h1>
+<section class="voting-container">
+    <div class='window-background'>
+        <form>
+            <h2>{{ poll.title }}</h2>
+            <p>{{ poll.description }}</p>
+            {% for choice in poll.choices %}
+                <div class="choice-box">
+                    <div>
+                        <span class="vote-percent">{{choice.current_percent|int}}%</span>
+                        {{ choice.text }}
+                    </div>
+                    <div class="progressbar">
+                        <div style="width: {{choice.current_percent}}%;"></div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="poll-stats">
+                <div>Total Votes: {{ poll.total_votes }}</div>
+                <div>
+                    <div>Started on: {{ poll.started_on }}</div>
+                    <div>Ended on: {{ poll.expires_on }}</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock content %}

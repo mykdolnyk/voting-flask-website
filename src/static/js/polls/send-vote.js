@@ -50,14 +50,17 @@ function displayPollResults(data) {
         // Use correct attribute selector syntax
         let progressbar = document.getElementById(`progressbar-${choice.id}`)
         let progressbarBar = progressbar.firstElementChild
+        let percentDisplay = document.getElementById(`percent-${choice.id}`)
         let radioInput = document.querySelector(`input[type="radio"][value="${choice.id}"]`)
 
         radioInput.style.display = 'none'
 
         votePercent = (choice.total_votes / data.poll_data.total_votes) * 100
         progressbarBar.style.width = `${votePercent}%`
+        percentDisplay.innerText = `${votePercent}%`
 
         progressbar.classList.remove('hidden')
+        percentDisplay.classList.remove('hidden')
     }
 }   
 

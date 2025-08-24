@@ -50,9 +50,11 @@ a {
 
 .hidden {
     height: 0px;
+    width: 0px;
     border: 0px;
+    padding: 0px;
 
-    transition: height 0.5s;
+    transition: height 0.5s, width 0.5s;
 }
 
 .button {
@@ -78,4 +80,10 @@ a {
 .button:active {
     transition: filter 0.2s;
     filter: saturate(1.1)
+}
+
+.window-background {
+    border-radius: 15px;
+    background-color: rgb(84, 146, 65);
+    box-shadow: rgba(0, 0, 0, 0.514) 0px 1px 10px;
 }

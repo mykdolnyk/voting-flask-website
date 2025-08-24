@@ -15,11 +15,7 @@
 
     padding: 40px;
 
-    width: 40%;
-
-    border-radius: 15px;
-    background-color: rgb(84, 146, 65);
-    box-shadow: rgba(0, 0, 0, 0.514) 0px 1px 10px;
+    width: 33vw;
 }
 
 .choice-box {
@@ -59,4 +55,13 @@
 .voting-container button:active, input[type='button']:active {
     background-color: rgb(64, 194, 12);
     transition: background-color 0.05s;
+}
+
+.vote-percent {
+    display: inline-block;
+    background-color: rgb(139, 204, 42);
+    color: rgb(218, 238, 212);
+    border-radius: 5px;
+    padding: 1px 4px;
+    width: 5ex;
 }

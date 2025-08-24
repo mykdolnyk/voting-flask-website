@@ -52,6 +52,13 @@ class Choice(db.Model):
         ).scalar()
 
         return result
+    
+    @property
+    def current_percent(self):
+        try:
+            return (self.total_votes / self.poll.total_votes) * 100
+        except ZeroDivisionError:
+            return 0
 
 
 class Vote(db.Model):
