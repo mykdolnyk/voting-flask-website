@@ -82,6 +82,13 @@ a {
     filter: saturate(1.1)
 }
 
+.button:disabled, .button:hover:disabled, .button:active:disabled {
+    background-color: rgb(132, 145, 120);
+    color: rgb(167, 167, 167);
+    border-color: rgb(167, 167, 167);
+    filter: brightness(1)
+}
+
 .window-background {
     border-radius: 15px;
     background-color: rgb(84, 146, 65);

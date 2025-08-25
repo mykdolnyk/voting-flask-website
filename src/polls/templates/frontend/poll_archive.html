@@ -1,27 +1,32 @@
 {% extends 'base.html' %}
 
+{% block js %}
+    <script>
+        const requestUrl = "{{ url_for('api.get_poll_list') }}"
+    </script>
+    <script src="{{ url_for('static', filename='js/polls/load_poll_list.js') }}" defer></script>
+{% endblock js %}
+
 {% block content %}
 <div class="poll-list-container">
     <h1>Poll Archive</h1>
-    <section class="poll-list">
-        {% for poll in poll_list %}
+    <section class="poll-list" id="poll-list">
+        <template id="poll-card-template">
             <div class="poll-card">
-                <span class="poll-title">
-                    {{ poll.title }}
-                </span>
+                <span class="poll-title"></span>
                 <div class="poll-winner-info">
                     <p>👑</p>
-                    <p class="poll-winner">
-                        {{ poll.current_winner.text }}
-                    </p>
+                    <p class="poll-winner"></p>
                 </div>
                 <div class="poll-stats">
-                    <p>Total votes: <span>{{ poll.total_votes }}</span></p>
-                    <p>Ended on: {{ poll.expires_on }}</p>
+                    <p>Total votes: <span class="poll-total-votes"></span></p>
+                    <p>Ended on: <span class="poll-ended-on"></span></p>
                 </div>
-                <a href="{{ url_for("frontend.poll_results", id=poll.id) }}" class="button">Check</a>
+                <a class="button">Check</a>
             </div>
-        {% endfor %}
+        </template>
     </section>
+    <input type="button" id='load-more-button' class="button" value="More">
+
 </div>
 {% endblock content %}
