@@ -17,7 +17,7 @@
 
     display: grid;
     grid-auto-flow: row;
-    grid-template-columns: repeat(auto-fit, 300px);
+    grid-template-columns: repeat(auto-fit, 325px);
 
     row-gap: 30px;
     column-gap: 30px;

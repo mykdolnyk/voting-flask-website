@@ -20,8 +20,8 @@
             <div class="poll-stats">
                 <div>Total Votes: {{ poll.total_votes }}</div>
                 <div>
-                    <div>Started on: {{ poll.started_on }}</div>
-                    <div>Ended on: {{ poll.expires_on }}</div>
+                    <div>Starting date: {{ poll.started_on.strftime('%d-%m-%Y, %H:%M') }}</div>
+                    <div>Ending date: {{ poll.started_on.strftime('%d-%m-%Y, %H:%M') }}</div>
                 </div>
             </div>
         </form>

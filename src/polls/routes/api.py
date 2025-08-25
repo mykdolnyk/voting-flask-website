@@ -1,5 +1,4 @@
 import json
-import flask
 from flask.blueprints import Blueprint
 from flask import request, session, url_for, jsonify
 from polls.forms import PollVotingForm
@@ -25,7 +24,7 @@ def get_poll_list():
     result = [
         {'title': poll.title,
          'id': poll.id,
-         'expires_on': poll.expires_on,
+         'expires_on': poll.expires_on.strftime('%d-%m-%Y, %H:%M'),
          'total_votes': poll.total_votes,
          'current_winner': poll.current_winner.text,
          'url': url_for('frontend.poll_results', id=poll.id)}
