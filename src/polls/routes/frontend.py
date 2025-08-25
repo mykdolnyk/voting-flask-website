@@ -38,8 +38,7 @@ def current_poll():
 
 @frontend_blueprint.route('/archive/', methods=['GET'])
 def poll_archive():
-    poll_list = Poll.query.order_by(Poll.id.desc()).all()
-    return render_template('poll_archive.html', poll_list=poll_list)
+    return render_template('poll_archive.html')
 
 
 @frontend_blueprint.route('/archive/<int:id>', methods=['GET'])
