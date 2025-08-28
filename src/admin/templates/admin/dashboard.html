@@ -9,7 +9,7 @@
 
 <div class="admin-dashboard-container">
     
-    <div class="admin-card admin-active-poll">
+    <div class="container-card admin-active-poll">
         <h2>Active Poll</h2>
         {% if active_poll %}
             <h3>{{ active_poll.title }}</h3>
@@ -27,7 +27,7 @@
         {% endif %}
     </div>
     
-    <div class="admin-card admin-poll-list">
+    <div class="container-card admin-poll-list">
         <h2>All Polls</h2>
         <ul>
             {% for poll in all_polls %}

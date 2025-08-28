@@ -28,6 +28,23 @@ main {
     padding: 10px 25px;
 }
 
+.container-card {
+    background-color: rgb(58, 136, 58);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.289) 1px 1px 5px;
+}
+
+.minimal-window {
+    width: min-content;
+}
+
+.window-background {
+    border-radius: 15px;
+    background-color: rgb(84, 146, 65);
+    box-shadow: rgba(0, 0, 0, 0.514) 0px 1px 10px;
+}
+
 .progressbar {
     background-color: rgb(37, 97, 42);
     height: 1.8rem;
@@ -62,6 +79,7 @@ main {
 
 .button {
     background-color: rgb(29, 149, 51);
+    color: var(--font-color);
 
     border-color: rgb(19, 106, 35);
     border-style: solid;
@@ -90,10 +108,4 @@ main {
     color: rgb(167, 167, 167);
     border-color: rgb(167, 167, 167);
     filter: brightness(1)
-}
-
-.window-background {
-    border-radius: 15px;
-    background-color: rgb(84, 146, 65);
-    box-shadow: rgba(0, 0, 0, 0.514) 0px 1px 10px;
 }
