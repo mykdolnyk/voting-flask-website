@@ -29,7 +29,7 @@
     margin: 0;
 }
 
-.voting-container button, input[type='button'] {
+.voting-container button, .voting-container input[type='button'] {
     width: fit-content;
     padding: 8px 15px;
 

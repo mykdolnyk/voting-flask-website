@@ -3,36 +3,42 @@
 {% block content %}
 <h1>PinVote Admin Dashboard</h1>
 
-<a href="{{ url_for('admin.new_poll') }}">New Poll</a>
+<div class="admin-quick-actions">
+    <a href="{{ url_for('admin.new_poll') }}" class="button">Create New Poll</a>
+</div>
 
-<div class="admin-active-poll">
-    <h2>Active Poll:</h2>
-    {% if active_poll %}
-        {{ active_poll.title }}
-        <a href="{{ url_for("admin.poll_stats", id=active_poll.id) }}">Stats</a>
-        <a href="{{ url_for("admin.edit_poll", id=active_poll.id) }}">Edit</a>
-        <ul>
-            {% for choice in active_poll.choices %}
+<div class="admin-dashboard-container">
+    
+    <div class="admin-card admin-active-poll">
+        <h2>Active Poll</h2>
+        {% if active_poll %}
+            <h3>{{ active_poll.title }}</h3>
+            <ul>
+                {% for choice in active_poll.choices %}
                 <li>
                     {{choice.text}}
                 </li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for("admin.poll_stats", id=active_poll.id) }}" class="button">Stats</a>
+            <a href="{{ url_for("admin.edit_poll", id=active_poll.id) }}" class="button">Edit</a>
+        {% else %}
+            No active polls at the moment
+        {% endif %}
+    </div>
+    
+    <div class="admin-card admin-poll-list">
+        <h2>All Polls</h2>
+        <ul>
+            {% for poll in all_polls %}
+                <li>
+                    {{ poll.title }}
+                    <a href="{{ url_for("admin.poll_stats", id=poll.id) }}" class="">Stats</a>
+                    <a href="{{ url_for("admin.edit_poll", id=poll.id) }}" class="">Edit</a>
+                </li>
             {% endfor %}
         </ul>
-    {% else %}
-        No active polls at the moment
-    {% endif %}
-</div>
-
-<div class="admin-poll-list">
-    <h2>All Polls</h2>
-    <ul>
-        {% for poll in all_polls %}
-            <li>
-                {{ poll.title }}
-                <a href="{{ url_for("admin.poll_stats", id=poll.id) }}">Stats</a>
-                <a href="{{ url_for("admin.edit_poll", id=poll.id) }}">Edit</a>
-            </li>
-        {% endfor %}
-    </ul>
+    </div>
+    
 </div>
 {% endblock content %}

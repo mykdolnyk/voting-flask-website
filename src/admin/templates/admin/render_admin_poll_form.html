@@ -1,0 +1,44 @@
+{{ form.hidden_tag() }}
+
+{% for field in form if field.type not in ['HiddenField', 'CSRFTokenField'] %}
+    {% if field.type == 'FieldList' %}
+        <div class="admin-choice-form-section" id="admin-choice-form-section">
+            {% for subform in field %}
+                {% for subfield in subform %}
+                    <div>
+                        {% if subfield.type not in ['HiddenField', 'CSRFTokenField'] %}
+                            {{ subfield.label }}
+                            {{ subfield }}
+                        {% else %}
+                            {{ subfield }}
+                        {% endif %}
+                    </div>  
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% elif field.type == 'RadioField' %}
+        <div>
+            {% for subfield in field %}
+                <div>
+                    {{ subfield }}
+                    {{ subfield.label }}
+                </div>  
+            {% endfor %}
+        </div>
+    {% else %}
+        <div>
+            {{ field.label }}
+            {{ field }}
+        </div>
+    {% endif %}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            {{error}}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+<ul>
+    {% for error in form.form_errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+</ul>

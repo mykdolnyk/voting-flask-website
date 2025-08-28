@@ -2,12 +2,18 @@
 
 {% block title %}PinVote Admin{% endblock title %}
 
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/admin.css") }}">
+{% endblock css %}
+
 {% block header %}
-<div class="header">
-    <a href="{{ url_for('admin.dashboard') }}">PinVote Admin</a>
-    <a href="{{ url_for('frontend.current_poll') }}">PinVote Website</a>
-</div>
-<hr>
+    <header class="admin-header">
+        <a href="{{ url_for('admin.dashboard') }}">PinVote Admin</a>
+        <a href="{{ url_for('frontend.current_poll') }}">PinVote Website</a>
+    </header>
 {% endblock header %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+{% endblock content %}
+

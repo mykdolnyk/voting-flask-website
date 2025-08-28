@@ -24,6 +24,9 @@ a {
     font-weight: 600;
 }
 
+main {
+    padding: 10px 25px;
+}
 
 .progressbar {
     background-color: rgb(37, 97, 42);

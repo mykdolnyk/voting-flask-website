@@ -1,11 +1,15 @@
 {% extends 'admin_base.html' %}
 
+{% block js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin/edit_poll.js') }}" defer></script>
+{% endblock js %}
+
 {% block content %}
 <h1>New Poll</h1>
-    <form action="{{ url_for('admin.new_poll') }}" method='post'>
-        {% include 'render_form.html' %}
-        <input type="submit" value="Create">
+    <form action="{{ url_for('admin.new_poll') }}" method='post' class="admin-form" id="admin-form">
+        {% include 'render_admin_poll_form.html' %}
+        <input type="button" value="Add New Choice" class="button" id="add-choice-button">
+        <input type="submit" value="Create" class="button">
     </form>
-    <hr>
-
 {% endblock content %}
