@@ -4,6 +4,7 @@
     right: 10px;
     bottom: 10px;
 
+    max-width: 400px;
     padding: 10px 20px;
 
     border-style: solid;
@@ -13,9 +14,6 @@
     transition: opacity 0.5s;
 
     box-shadow: rgba(0, 0, 0, 0.363) 1px 1px 5px;
-
-    display: none;
-    opacity: 0%;
 }
 
 .flash-close {
@@ -52,4 +50,10 @@
 .flash-blue {
     background-color: rgba(0, 140, 255, 0.795);
     border-color: rgb(0, 89, 255);
+}
+
+.flash-hidden {
+    display: none;
+    opacity: 0%;
+    transition: opacity 0.5s;
 }

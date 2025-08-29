@@ -121,9 +121,10 @@ header.admin-header .logo > a {
 
 #add-choice-button {
     grid-area: add-choice-button;
+    background-color: rgb(12, 132, 12);
 }
 
 .admin-form > input[type='submit'] {
     grid-area: submit-button;
-
+    background-color: rgb(12, 132, 12);
 }

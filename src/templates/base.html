@@ -15,7 +15,7 @@
         {% endblock title %}
     </title>
     {% block js %}
-
+        <script src="{{ url_for('static', filename='js/flashes.js')}}" defer></script>
     {% endblock js %}
 </head>
 <body>
@@ -33,11 +33,16 @@
     <main>
         {% block content %}{% endblock content %}
 
-        <section class="flash flash-blue">
-            <button class="flash-close">X</button>
-            <h3>{{ flash }}</h3>
-            <p>{{ flash }}</p>
-        </section>
+        {% with messages = get_flashed_messages() %}
+            <div class="flash flash-blue {% if not messages %}flash-hidden{% endif %}">
+                <button class="flash-close">X</button>
+                <h3>Hey!</h3>
+                {% for message in messages %}
+                    {{ message|safe }}
+                {% endfor %}
+            </div>
+        {% endwith %}
+
     </main>
 </body>
 </html>
