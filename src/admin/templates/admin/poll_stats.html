@@ -1,22 +1,131 @@
 {% extends 'admin_base.html' %}
 
+{% block js %}
+    {{ super() }}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Choice', 'Votes'],
+          {% for choice in poll.choices %}
+            ['{{ choice.text }}', {{ choice.total_votes }}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Total Votes',
+          backgroundColor: {
+              fill: '#ffffffff',
+              fillOpacity: 0.35
+          },
+    }
+
+        var chart = new google.visualization.PieChart(document.getElementById('votes-distribution-chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      nan = null
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable({{ votes_over_time|safe }});
+
+        var options = {
+          title: 'Votes/time',
+          legend: { position: 'bottom' },
+          backgroundColor: {
+              fill: '#ffffffff',
+              fillOpacity: 0.35
+          },
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('votes-over-time-chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Choice', 'Votes'],
+          {% for choice in poll.choices %}
+            ['{{ choice.text }}', {{ choice.failed_votes_count }}],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Failed Votes',
+          backgroundColor: {
+              fill: '#ffffffff',
+              fillOpacity: 0.35
+          },
+    }
+
+        var chart = new google.visualization.PieChart(document.getElementById('failed-votes-distribution-chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock js %}
+
 {% block content %}
 <h1>Poll Stats</h1>
 
-<h2>{{ poll.title }}</h2>
-<a href="{{ url_for('admin.edit_poll', id=poll.id) }}">Edit</a>
-<p> {{ poll.description }} </p>
 
-<p>Started on: {{ poll.started_on }}</p>
-<p>Expires on: {{ poll.expires_on }}</p>
+<div class="admin-poll-stats-container">
 
-<ul>
-    {% for choice in poll.choices %}
-        <li>
-            {{ choice.text }} - {{ choice.total_votes }}
-            <progress value="{{ choice.total_votes }}" max="{{ poll.total_votes }}"></progress>
-        </li>
-    {% endfor %}
-</ul>
+  <div class="container-card">
+    <h2>{{ poll.title }}</h2>
+    <p> {{ poll.description }} </p>
+    <p>Started on: <b>{{ poll.started_on }}</b></p>
+    <p>Expires on: <b>{{ poll.expires_on }}</b></p>
+    <a href="{{ url_for('admin.edit_poll', id=poll.id) }}" class="button">Edit</a>
+    <h2>Failed Votes Info</h2>
+    <p>Total Failed Votes: <b>{{ poll.failed_votes_count }}</b></p>
+    <p>Failed Votes rate: <b>{{ poll.failed_votes_count / (poll.failed_votes_count + poll.total_votes) * 100 }}%</b></p>
+    <div class="progressbar">
+      <div style="width: {{ poll.failed_votes_count / (poll.failed_votes_count + poll.total_votes) * 100 }}%;"></div>
+    </div>
+    <br>
+    <div id="failed-votes-distribution-chart" style="width: min-content; height: 300px;"></div>
 
+  </div>
+
+  <div class="admin-poll-stats-choices container-card">
+    <h2>Choices</h2>
+    <p>Total Votes: <b>{{ poll.total_votes }}</b></p>
+    <ul>
+      {% for choice in poll.choices %}
+      <li>
+        <div>
+          <span class="vote-percent">{{choice.current_percent|int}}%</span>
+          <span>{{ choice.text }} <i>- {{ choice.total_votes }} vote(s)</i></span>
+        </div>
+        <div class="progressbar">
+          <div style="width: {{ choice.current_percent }}%;"></div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  
+  <div class="admin-poll-stats-charts container-card">
+    <h2>Charts</h2>
+    <div id="votes-distribution-chart" style="width: 600px; height: 400px;"></div>
+    <div id="votes-over-time-chart" style="width: 600px; height: 300px;"></div>
+  </div>
+</div>
+  
 {% endblock content %}

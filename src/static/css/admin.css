@@ -68,7 +68,7 @@ header.admin-header .logo > a {
 
 .admin-active-poll ul {
     padding: 0%;
-    list-style: square
+    list-style: none
 }
 
 .admin-form {
@@ -127,4 +127,22 @@ header.admin-header .logo > a {
 .admin-form > input[type='submit'] {
     grid-area: submit-button;
     background-color: rgb(12, 132, 12);
+}
+
+.admin-poll-stats-choices {
+    width: 25%;
+}
+
+.admin-poll-stats-choices ul {
+    padding: 0%;
+    list-style: none;
+}
+
+.admin-poll-stats-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-poll-stats-container > div {
+    height: min-content;
 }

@@ -55,7 +55,7 @@ function displayPollResults(data) {
 
         radioInput.style.display = 'none'
 
-        votePercent = (choice.total_votes / data.poll_data.total_votes) * 100
+        votePercent = Math.trunc((choice.total_votes / data.poll_data.total_votes) * 100)
         progressbarBar.style.width = `${votePercent}%`
         percentDisplay.innerText = `${votePercent}%`
 
