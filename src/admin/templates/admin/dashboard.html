@@ -4,6 +4,8 @@
 <h1>PinVote Admin Dashboard</h1>
 
 <div class="admin-quick-actions">
+    <span class="container-card"><b>{{ poll_count }}</b> Poll(s)</span>
+    <span class="container-card"><b>{{ vote_count }}</b> Total Vote(s)</span>
     <a href="{{ url_for('admin.new_poll') }}" class="button">Create New Poll</a>
 </div>
 

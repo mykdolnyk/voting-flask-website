@@ -52,8 +52,10 @@ def de_auth():
 def dashboard():
     context = {}
 
-    context['all_polls'] = Poll.query.order_by(Poll.id.desc()).all()
     context['active_poll'] = Poll.get_active_poll()
+    context['all_polls'] = Poll.query.order_by(Poll.id.desc()).all()
+    context['poll_count'] = len(context['all_polls'])
+    context['vote_count'] = Vote.query.filter(Vote.failed == False).count()
 
     return render_template('dashboard.html', **context)
 
