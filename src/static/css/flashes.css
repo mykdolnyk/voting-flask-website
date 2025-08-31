@@ -16,6 +16,10 @@
     box-shadow: rgba(0, 0, 0, 0.363) 1px 1px 5px;
 }
 
+.flash > div {
+    margin-bottom: 1em;
+}
+
 .flash-close {
     box-sizing: content-box;
     height: 20px;
