@@ -94,9 +94,9 @@
     <a href="{{ url_for('admin.edit_poll', id=poll.id) }}" class="button">Edit</a>
     <h2>Failed Votes Info</h2>
     <p>Total Failed Votes: <b>{{ poll.failed_votes_count }}</b></p>
-    <p>Failed Votes rate: <b>{{ poll.failed_votes_count / (poll.failed_votes_count + poll.total_votes) * 100 }}%</b></p>
+    <p>Failed Votes rate: <b>{{ failed_votes_rate }}%</b></p>
     <div class="progressbar">
-      <div style="width: {{ poll.failed_votes_count / (poll.failed_votes_count + poll.total_votes) * 100 }}%;"></div>
+      <div style="width: {{ failed_votes_rate }}%;"></div>
     </div>
     <br>
     <div id="failed-votes-distribution-chart" style="width: min-content; height: 300px;"></div>
@@ -123,8 +123,12 @@
   
   <div class="admin-poll-stats-charts container-card">
     <h2>Charts</h2>
-    <div id="votes-distribution-chart" style="width: 600px; height: 400px;"></div>
-    <div id="votes-over-time-chart" style="width: 600px; height: 300px;"></div>
+    {% if poll.total_votes %}
+      <div id="votes-distribution-chart" style="width: 600px; height: 400px;"></div>
+      <div id="votes-over-time-chart" style="width: 600px; height: 300px;"></div>
+    {% else %}
+      <p>Not Enough Data</p>
+    {% endif %}
   </div>
 </div>
   

@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user
 from admin.helpers import superuser_only
 from config import ADMIN_URL_PREFIX
 from admin.forms import LoginForm, NewPollForm, EditPollForm
-from polls.models import Poll, Choice, User
+from polls.models import Poll, Choice, User, Vote
 from app_factory import db
 from werkzeug.security import check_password_hash
 
@@ -179,12 +179,20 @@ def poll_stats(id: int):
     
     poll: Poll = Poll.query.get_or_404(id)
     context['poll'] = poll
-    
+    try:
+        context['failed_votes_rate'] = poll.failed_votes_count / (poll.failed_votes_count + poll.total_votes) * 100
+    except ZeroDivisionError:
+        context['failed_votes_rate'] = 0
+        
     raw_votes_over_time = poll.votes_over_time('1h')
-    votes_over_time_header = [['Time'] + raw_votes_over_time.columns.to_list()]
-    votes_over_time_rows = [[str(time)] + row.to_list() for time, row in raw_votes_over_time.iterrows()]
-    votes_over_time = votes_over_time_header + votes_over_time_rows
     
-    context['votes_over_time'] = votes_over_time
+    if not raw_votes_over_time.empty:
+        votes_over_time_header = [['Time'] + raw_votes_over_time.columns.to_list()]
+        votes_over_time_rows = [[str(time)] + row.to_list() for time, row in raw_votes_over_time.iterrows()]
+        votes_over_time = votes_over_time_header + votes_over_time_rows
+        
+        context['votes_over_time'] = votes_over_time
+    else:
+        context['votes_over_time'] = []
 
     return render_template('poll_stats.html', **context)
