@@ -26,7 +26,7 @@ def get_poll_list():
          'id': poll.id,
          'expires_on': poll.expires_on.strftime('%d-%m-%Y, %H:%M'),
          'total_votes': poll.total_votes,
-         'current_winner': poll.current_winner.text,
+         'current_winner': poll.current_winner.text if poll.current_winner else '',
          'url': url_for('frontend.poll_results', id=poll.id)}
         for poll in poll_page
     ]

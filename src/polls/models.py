@@ -37,7 +37,7 @@ class Poll(db.Model):
     @property
     def current_winner(self):
         sorted_choices = sorted(self.choices, key=lambda choice: choice.total_votes)
-        return sorted_choices[0]
+        return sorted_choices[0] if sorted_choices else None
 
     @staticmethod
     def get_active_poll() -> 'Poll':
