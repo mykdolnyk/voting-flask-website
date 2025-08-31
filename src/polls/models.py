@@ -48,10 +48,10 @@ class Poll(db.Model):
     def votes_over_time(self, frequency='D'):
         dfs = [choice.votes_over_time(frequency) for choice in self.choices]
 
-        if not dfs:
+        try:
+            result = pandas.concat(dfs, axis=1)
+        except ValueError:
             return None
-        
-        result = pandas.concat(dfs, axis=1)
 
         return result
 
