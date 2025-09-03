@@ -11,7 +11,7 @@ from app_factory import db
 from werkzeug.security import check_password_hash
 
 admin_blueprint = Blueprint('admin', __name__,
-                            url_prefix=ADMIN_URL_PREFIX,
+                            url_prefix=f"/{ADMIN_URL_PREFIX}",
                             template_folder='templates/admin')
 
 

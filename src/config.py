@@ -11,4 +11,4 @@ STATIC_URL_PATH = '/static/'
 
 TEMPLATE_FOLDER = 'templates/'
 
-ADMIN_URL_PREFIX = os.getenv('FLASK_ADMIN_URL_PREFIX', default='/admin')
+ADMIN_URL_PREFIX = os.getenv('FLASK_ADMIN_URL_PREFIX', default='admin')
