@@ -26,6 +26,11 @@ services:
     ports:
       - "80:80"
 
+  redis:
+    image: redis:latest
+    expose:
+      - 6379
+
 volumes:
   psql_data:
   static_volume:
