@@ -3,7 +3,7 @@ from flask import flash, redirect, request, url_for
 from flask.blueprints import Blueprint
 from flask.templating import render_template
 from flask_login import login_user, logout_user
-from admin.helpers import superuser_only
+from admin.helpers import clear_cache_keys, superuser_only
 from config import ADMIN_URL_PREFIX
 from admin.forms import LoginForm, NewPollForm, EditPollForm
 from polls.models import Poll, Choice, User, Vote
@@ -87,6 +87,8 @@ def new_poll():
 
                 db.session.add(poll)
                 db.session.commit()
+                
+                clear_cache_keys("get_poll_list:*")
 
                 flash(render_template('flashes/success.html',
                                       message='The poll has been successully created.'),
@@ -97,6 +99,7 @@ def new_poll():
             except Exception:
                 # Todo: Log that somewhere
                 form.form_errors.append('Something went wrong.')
+                raise
 
     context['form'] = form
     return render_template('new_poll.html', **context)
@@ -154,6 +157,8 @@ def edit_poll(id: int):
                         db.session.delete(choice)
 
                 db.session.commit()
+                
+                clear_cache_keys("get_poll_list:*")
 
                 flash(render_template('flashes/success.html',
                                       message='The poll has been successully updated.'),

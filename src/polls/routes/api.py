@@ -4,7 +4,7 @@ from flask import request, session, url_for, jsonify
 from polls.forms import PollVotingForm
 from polls.models import Choice, Poll, Vote
 from polls.helpers import extract_public_poll_info, verify_vote, get_ip_address
-from app_factory import db, hashing
+from app_factory import db, hashing, redis_client
 
 
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
@@ -13,10 +13,16 @@ api_blueprint = Blueprint('api', __name__, url_prefix='/api')
 @api_blueprint.route('/polls', methods=['GET'])
 def get_poll_list():
     page = request.args.get('page', 1, type=int)
+    per_page = 4
+    
+    cached_result = redis_client.get(f"get_poll_list:page-{page};per_page:{per_page}")
+    if cached_result:
+        return jsonify(json.loads(cached_result))
+    
     poll_page = (Poll.query
                  .order_by(Poll.id.desc())
                  .filter(Poll.hidden == False)
-                 .paginate(page=page, per_page=4, error_out=False))
+                 .paginate(page=page, per_page=per_page, error_out=False))
     
     if len(poll_page.items) <= 0:
         return jsonify([])
@@ -32,6 +38,7 @@ def get_poll_list():
     ]
 
     if result:
+        redis_client.set(f"get_poll_list:page-{page};per_page:{per_page}", json.dumps(result), ex=60*30)
         return jsonify(result)
 
 
