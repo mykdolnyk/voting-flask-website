@@ -1,7 +1,7 @@
 import json
 from flask import Request, request, session
 from polls.models import Choice, Poll, Vote
-from app_factory import hashing
+from app_factory import hashing, redis_client
 
 
 def extract_public_poll_info(poll: Poll):
@@ -29,7 +29,12 @@ def extract_public_poll_info(poll: Poll):
 
 def verify_vote(request: Request) -> bool:
     try:
-        voted = voted_before(request)
+        cached_voted = redis_client.get(f'voted_before:{hashing.hash_value(get_ip_address())}')
+        if cached_voted is not None:
+            voted = int(cached_voted)
+        else:
+            voted = voted_before(request)
+            redis_client.set(f'voted_before:{hashing.hash_value(get_ip_address())}', int(True), ex=60*15)
         malformed = False
     except (TypeError, KeyError, json.JSONDecodeError):
         voted = None

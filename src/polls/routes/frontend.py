@@ -2,9 +2,10 @@ from flask.blueprints import Blueprint
 from flask.templating import render_template
 from flask import request, session
 from polls.forms import PollVotingForm
-from polls.helpers import voted_before
+from polls.helpers import get_ip_address, voted_before
 from polls.models import Poll
 from uuid import uuid4
+from app_factory import redis_client, hashing
 
 frontend_blueprint = Blueprint('frontend', __name__, 
                                template_folder='../templates/frontend')
@@ -23,7 +24,14 @@ def current_poll():
         context['poll'] = poll
         context['form'] = form
         
-        context['voted_before'] = voted_before(request, skip_thumbmark=True)
+        cached_voted = redis_client.get(f'voted_before_skipthumb:{hashing.hash_value(get_ip_address())}')
+        if cached_voted is not None:
+            voted = int(cached_voted)
+        else:
+            voted = voted_before(request, skip_thumbmark=True)
+            redis_client.set(f'voted_before_skipthumb:{hashing.hash_value(get_ip_address())}', int(True), ex=60*15)
+        
+        context['voted_before'] = voted
         
     else:
         context['poll'] = None
