@@ -41,10 +41,13 @@ class Poll(db.Model):
 
     @staticmethod
     def get_active_poll() -> 'Poll':
-        return Poll.query.filter(Poll.expires_on > datetime.datetime.now(),
-                                 Poll.force_expired == False,
-                                 Poll.hidden == False).first()
-        
+        return (Poll.query
+                .filter(Poll.expires_on > datetime.datetime.now(),
+                        Poll.force_expired == False,
+                        Poll.hidden == False)
+                .order_by(Poll.expires_on.asc(),
+                          Poll.started_on.asc()).first())
+
     def votes_over_time(self, frequency='D'):
         dfs = [choice.votes_over_time(frequency) for choice in self.choices]
 
