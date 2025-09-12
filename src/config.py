@@ -8,7 +8,7 @@ SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg://{os.getenv('POSTGRES_USER')}:{o
 
 REDIS_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}"
 
-STATIC_FOLDER = 'static/'
+STATIC_FOLDER = 'staticfiles/'
 STATIC_URL_PATH = '/static/'
 
 TEMPLATE_FOLDER = 'templates/'
