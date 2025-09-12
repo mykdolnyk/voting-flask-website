@@ -2,6 +2,8 @@ services:
   web:
     build: .
     volumes:
+      - ./src:/src
+      - ./entrypoint.sh:/src/entrypoint.sh
       - static_volume:/src/static
     expose:
       - 5000
