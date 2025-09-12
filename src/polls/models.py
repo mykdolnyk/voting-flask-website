@@ -2,9 +2,11 @@ import datetime
 import pandas
 from typing import List, Optional
 from flask_login import UserMixin
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey, func, false
 from app_factory import db
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from polls.forms import PollVotingForm, PollVotingFormWithUsername
+
 
 class Poll(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -15,6 +17,8 @@ class Poll(db.Model):
     force_expired: Mapped[bool] = mapped_column(default=False)
     hidden: Mapped[bool] = mapped_column(default=False)
     choices: Mapped[List['Choice']] = relationship(back_populates='poll')
+    username_required: Mapped[bool] = mapped_column(
+        default=False, server_default=false(), nullable=False)
 
     @property
     def total_votes(self):
@@ -24,7 +28,7 @@ class Poll(db.Model):
             total += choice.total_votes
 
         return total
-    
+
     @property
     def failed_votes_count(self):
         total = 0
@@ -33,10 +37,11 @@ class Poll(db.Model):
             total += choice.failed_votes_count
 
         return total
-    
+
     @property
     def current_winner(self):
-        sorted_choices = sorted(self.choices, key=lambda choice: choice.total_votes)
+        sorted_choices = sorted(
+            self.choices, key=lambda choice: choice.total_votes)
         return sorted_choices[0] if sorted_choices else None
 
     @staticmethod
@@ -58,6 +63,12 @@ class Poll(db.Model):
 
         return result
 
+    def get_poll_form(self):
+        if self.username_required:
+            return PollVotingFormWithUsername()
+        else:
+            return PollVotingForm()
+
 
 class Choice(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -74,16 +85,16 @@ class Choice(db.Model):
         ).scalar()
 
         return result
-    
+
     @property
     def failed_votes_count(self):
         result = db.session.query(func.count(Vote.id)).filter(
             Vote.choice == self,
             Vote.failed == True
         ).scalar()
-        
+
         return result
-    
+
     @property
     def current_percent(self):
         try:
@@ -96,20 +107,21 @@ class Choice(db.Model):
             'timestamp': vote.cast_on,
             self.text: True,
         } for vote in self.votes if not vote.failed])
-        
+
         if df.empty:
             return None
-        
+
         df['timestamp'] = pandas.to_datetime(df['timestamp'])
         df = df.set_index('timestamp')
         groups = df.resample(frequency).count()
-        
+
         return groups
 
 
 class Vote(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    choice_id: Mapped[Optional[int]] = mapped_column(ForeignKey('choice.id'), nullable=True)
+    choice_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('choice.id'), nullable=True)
     choice: Mapped['Choice'] = relationship(back_populates='votes')
     cast_on: Mapped[datetime.datetime] = mapped_column(default=func.now())
     comment: Mapped[Optional[str]] = mapped_column()
@@ -117,6 +129,7 @@ class Vote(db.Model):
     fingerprint: Mapped[str] = mapped_column()
     user_id: Mapped[str] = mapped_column()
     failed: Mapped[bool] = mapped_column(default=False)
+    username: Mapped[str] = mapped_column(nullable=True)
 
 
 class User(db.Model, UserMixin):

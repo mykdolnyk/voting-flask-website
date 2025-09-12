@@ -2,11 +2,15 @@ const votingForm = document.getElementById("voting-form")
 const submitButton = document.getElementById('voting-form-submit')
 const pollResultsBlock = document.getElementById('poll-results')
 const choiceTemplate = document.getElementById('choice-template')
+const usernameInput = document.getElementById('username')
 submitButton.onclick = processSubmission
 
 let tm;
 
 async function processSubmission() {
+    let selected_option = document.querySelector('input[name="choice"]:checked');
+    if (selected_option == null) {return}  
+
     displaySubmission()
 
     if (!tm) {
@@ -24,7 +28,7 @@ async function processSubmission() {
         throw new Error(`HTTP Error: ${response.status}`);
     }
     const data = await response.json()
-    console.log(data)
+
     if (data.success) {
         displayPollResults(data)
     }
@@ -54,6 +58,9 @@ function displayPollResults(data) {
         let radioInput = document.querySelector(`input[type="radio"][value="${choice.id}"]`)
 
         radioInput.style.display = 'none'
+        if (usernameInput != null)  {
+            usernameInput.disabled = true;
+        }
 
         votePercent = Math.trunc((choice.total_votes / data.poll_data.total_votes) * 100)
         progressbarBar.style.width = `${votePercent}%`

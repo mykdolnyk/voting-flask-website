@@ -54,19 +54,32 @@ def get_poll_info(id: int):
 
 @api_blueprint.route('/vote', methods=['POST'])
 def submit_vote():
-    form = PollVotingForm(request.form)
+    poll = Poll.get_active_poll()
+    form = poll.get_poll_form()
+    form.process(request.form)
 
     ip_hash = hashing.hash_value(get_ip_address())
     fingerprint = json.loads(request.form.get('tm', '{}')).get('thumbmark')
     user_id = str(session.get('user_id'))
 
-    poll = Poll.get_active_poll()
-    choice: Choice = Choice.query.get(int(form.choice.data))
+    try:
+        username: str = form.username.data
+    except AttributeError:
+        username = None
+    
+    choice_id = form.choice.data
+    if choice_id is None:
+        return jsonify({
+            'success': False,
+        })
+    
+    choice: Choice = Choice.query.get(int(choice_id))
 
     if verify_vote(request):
         new_vote = Vote(ip_hash=ip_hash,
                         fingerprint=fingerprint,
-                        user_id=user_id)
+                        user_id=user_id,
+                        username=username)
         choice.votes.append(new_vote)
         db.session.commit()
 
@@ -79,6 +92,7 @@ def submit_vote():
         failed_new_vote = Vote(ip_hash=ip_hash,
                                fingerprint=fingerprint,
                                user_id=user_id,
+                               username=username,
                                failed=True,
                                choice=choice,
                                )

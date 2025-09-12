@@ -29,6 +29,7 @@ class NewPollForm(FlaskForm):
     choices = FieldList(FormField(ChoiceFormField, label='Choice'),
                         label='Choices', min_entries=4)
     hidden = BooleanField('Hidden', default=False)
+    username_required = BooleanField('Username is required', default=False)
 
 
 class EditPollForm(NewPollForm):

@@ -65,3 +65,14 @@
     padding: 1px 4px;
     width: 5ex;
 }
+
+input[type='text'], textarea {
+    font-size: 16px;
+    padding: 3px;
+    background-color: #a1d19d;
+
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: green;
+}

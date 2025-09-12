@@ -18,7 +18,7 @@ def current_poll():
     poll = Poll.get_active_poll()
     
     if poll:
-        form = PollVotingForm()
+        form = poll.get_poll_form()
         form.choice.choices = [(choice.id, choice.text) for choice in poll.choices]
 
         context['poll'] = poll
@@ -29,7 +29,8 @@ def current_poll():
             voted = int(cached_voted)
         else:
             voted = voted_before(request, skip_thumbmark=True)
-            redis_client.set(f'voted_before_skipthumb:{hashing.hash_value(get_ip_address())}', int(True), ex=60*15)
+            if voted:
+                redis_client.set(f'voted_before_skipthumb:{hashing.hash_value(get_ip_address())}', int(True), ex=60*15)
         
         context['voted_before'] = voted
         

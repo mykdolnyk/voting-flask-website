@@ -78,7 +78,8 @@ def new_poll():
                 poll = Poll(title=form.title.data,
                             description=form.description.data,
                             expires_on=expires_on,
-                            hidden=form.hidden.data)
+                            hidden=form.hidden.data,
+                            username_required=form.username_required.data)
 
                 for choice_data in form.choices.data:
                     if choice_data['text']:
@@ -89,7 +90,8 @@ def new_poll():
                 db.session.commit()
                 
                 clear_cache_keys("get_poll_list:*")
-
+                clear_cache_keys("voted_before*")
+                
                 flash(render_template('flashes/success.html',
                                       message='The poll has been successully created.'),
                       'info')
@@ -121,7 +123,7 @@ def edit_poll(id: int):
                             hidden=poll.hidden,
                             force_expired=poll.force_expired,
                             choices=choices,
-                            )
+                            username_required=poll.username_required)
 
     elif request.method == 'POST':
         form = EditPollForm(request.form)
@@ -135,6 +137,7 @@ def edit_poll(id: int):
                 poll.expires_on = expires_on
                 poll.hidden = form.hidden.data
                 poll.force_expired = form.force_expired.data
+                poll.username_required = form.username_required.data
 
                 for choice_data in form.choices.data:
                     # If it existed before
@@ -159,7 +162,8 @@ def edit_poll(id: int):
                 db.session.commit()
                 
                 clear_cache_keys("get_poll_list:*")
-
+                clear_cache_keys("voted_before*")
+                
                 flash(render_template('flashes/success.html',
                                       message='The poll has been successully updated.'),
                       'info')
