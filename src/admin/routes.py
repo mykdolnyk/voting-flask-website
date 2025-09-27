@@ -1,5 +1,5 @@
 import datetime
-from flask import flash, redirect, request, url_for
+from flask import flash, jsonify, redirect, request, url_for
 from flask.blueprints import Blueprint
 from flask.templating import render_template
 from flask_login import login_user, logout_user
@@ -205,3 +205,49 @@ def poll_stats(id: int):
         context['votes_over_time'] = []
 
     return render_template('poll_stats.html', **context)
+
+
+@admin_blueprint.route('/api/user-choices/<string:username>', methods=['GET'])
+@superuser_only
+def api_user_choices(username: str):
+    poll_id = request.args.get('poll', None, type=int)
+    votes = Vote.query.filter(Vote.username == username)
+    
+    if poll_id is not None:
+        poll_choices = Choice.query.filter(Choice.poll_id == poll_id).all()
+        poll_choice_ids = [choice.id for choice in poll_choices]
+        votes = votes.filter(Vote.choice_id.in_(poll_choice_ids))
+        
+    response = {
+        'username': username,
+        'choices': {
+            vote.choice.poll_id: vote.choice.text for vote in votes.all()
+        }
+    }
+
+    return jsonify(response)
+
+
+@admin_blueprint.route('/api/poll-voters/<int:poll_id>', methods=['GET'])
+@superuser_only
+def api_poll_voters(poll_id: int):
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    
+    poll: Poll = Poll.query.filter(Poll.id == poll_id).first()
+    choice_ids = (choice.id for choice in poll.choices)
+    
+    vote_page = (Vote.query.filter(Vote.choice_id.in_(choice_ids))
+                 .paginate(page=page, per_page=per_page, error_out=False))
+    
+    if len(vote_page.items) > 0:
+        result = {vote.username: vote.choice.id for vote in vote_page}
+    else: 
+        result = {}
+    
+    response = {
+        'poll_id': poll_id,
+        'voters': result
+    }
+    
+    return jsonify(response)
