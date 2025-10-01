@@ -2,6 +2,12 @@
 
 {% block js %}
     {{ super() }}
+    <script>
+      const checkUsernameUrl = '{{ url_for("admin.api_user_choices", username="__USERNAME__") }}'
+      const checkVotersUrl = '{{ url_for("admin.api_poll_voters", poll_id=poll.id) }}'
+      const pollId = {{ poll.id }}
+    </script>
+    <script src="{{ url_for("static", filename="js/admin/poll_stats.js") }}" defer></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
@@ -87,11 +93,13 @@
 <div class="admin-poll-stats-container">
 
   <div class="container-card">
-    <h2>{{ poll.title }}</h2>
-    <p> {{ poll.description }} </p>
-    <p>Started on: <b>{{ poll.started_on }}</b></p>
-    <p>Expires on: <b>{{ poll.expires_on }}</b></p>
+    <h2>General Information</h2>
+    <p><b>Title:</b> {{ poll.title }}</p>
+    <p><b>Description:</b> {{ poll.description if poll.description else "None" }}</p>
+    <p><b>Started on:</b> {{ poll.started_on }}</p>
+    <p><b>Expires on:</b> {{ poll.expires_on }}</p>
     <a href="{{ url_for('admin.edit_poll', id=poll.id) }}" class="button">Edit</a>
+    
     <h2>Failed Votes Info</h2>
     <p>Total Failed Votes: <b>{{ poll.failed_votes_count }}</b></p>
     <p>Failed Votes rate: <b>{{ failed_votes_rate }}%</b></p>
@@ -130,6 +138,29 @@
       <p>Not Enough Data</p>
     {% endif %}
   </div>
+</div>
+
+{% if poll.username_required %}
+
+<div class="admin-poll-stats-container">
+  <div class="container-card">
+    <h2>Check User's Choice by Username</h2>
+    <div class="hidden" id='check-username-result-box'>
+      <b id="checked-username"></b> voted the <b id="chosen-option"></b>.
+    </div>
+    <input type="text" name="username" id="check-username-input">
+    <button class="button" id="check-username-button">Check</button>
+  </div>
+  
+  <div class="container-card">
+    <h2>Users who Voted</h2>
+    <ul class="admin-user-list" id="admin-user-list">
+    </ul>
+    <button class="button" id="check-voters-button">Load</button>
+  </div>
+
+{% endif %}
+  
 </div>
   
 {% endblock content %}

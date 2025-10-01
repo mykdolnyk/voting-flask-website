@@ -210,7 +210,7 @@ def poll_stats(id: int):
 @admin_blueprint.route('/api/user-choices/<string:username>', methods=['GET'])
 @superuser_only
 def api_user_choices(username: str):
-    poll_id = request.args.get('poll', None, type=int)
+    poll_id = request.args.get('poll-id', None, type=int)
     votes = Vote.query.filter(Vote.username == username)
     
     if poll_id is not None:

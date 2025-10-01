@@ -141,8 +141,26 @@ header.admin-header .logo > a {
 .admin-poll-stats-container {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .admin-poll-stats-container > div {
     height: min-content;
+}
+
+.admin-user-list {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 250px;
+    overflow: auto;
+    flex: 1;
+}
+
+.admin-user-list li {
+    list-style: none;
+    background-color: rgb(37, 102, 37);
+    border-radius: 5px;
+    padding: 2px;
 }
