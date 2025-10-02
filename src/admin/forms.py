@@ -25,7 +25,7 @@ class NewPollForm(FlaskForm):
                               widget=widgets.TextArea(),
                               validators=(validators.Length(max=1024),))
     expires_on_date = DateField('Expires on day', widget=widgets.DateInput(), default=in_7_days)
-    expires_on_time = TimeField('Expires at', widget=widgets.TimeInput(), default=now)
+    expires_on_time = TimeField('Expires at (UTC)', widget=widgets.TimeInput(), default=now)
     choices = FieldList(FormField(ChoiceFormField, label='Choice'),
                         label='Choices', min_entries=4)
     hidden = BooleanField('Hidden', default=False)

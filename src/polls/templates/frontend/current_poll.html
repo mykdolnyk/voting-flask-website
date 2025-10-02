@@ -33,7 +33,7 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <p>Ending on {{ poll.expires_on.strftime('%d-%m-%Y at %H:%M') }}</p>
+                <p>Ending on {{ poll.expires_on.strftime('%d-%m-%Y at %H:%M') }} UTC</p>
             </form>
         </div>
     {% else %}
