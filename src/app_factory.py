@@ -1,10 +1,11 @@
+import config
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_hashing import Hashing
 from flask_redis import FlaskRedis
-
+from logging.config import dictConfig as loggingDictConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,6 +15,8 @@ redis_client = FlaskRedis()
 
 
 def create_app(config_object):
+    loggingDictConfig(config.LOGGING)
+    
     app = Flask(__name__)
     app.config.from_object(config_object)
 

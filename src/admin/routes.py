@@ -1,4 +1,5 @@
 import datetime
+from logging import getLogger
 from flask import flash, jsonify, redirect, request, url_for
 from flask.blueprints import Blueprint
 from flask.templating import render_template
@@ -9,6 +10,10 @@ from admin.forms import LoginForm, NewPollForm, EditPollForm
 from polls.models import Poll, Choice, User, Vote
 from app_factory import db
 from werkzeug.security import check_password_hash
+
+
+logger = getLogger(__name__)
+
 
 admin_blueprint = Blueprint('admin', __name__,
                             url_prefix=f"/{ADMIN_URL_PREFIX}",
@@ -99,9 +104,8 @@ def new_poll():
                 return redirect(url_for('admin.dashboard'))
 
             except Exception:
-                # Todo: Log that somewhere
+                logger.exception('There was an error trying to create a new poll.')
                 form.form_errors.append('Something went wrong.')
-                raise
 
     context['form'] = form
     return render_template('new_poll.html', **context)
@@ -171,9 +175,8 @@ def edit_poll(id: int):
                 return redirect(url_for('admin.dashboard'))
 
             except Exception:
-                # Todo: Log that somewhere
+                logger.exception(f'There was an error trying to edit an existing poll (poll.id={poll.id}).')
                 form.form_errors.append('Something went wrong.')
-                raise
 
     context['form'] = form
     context['poll_id'] = id
