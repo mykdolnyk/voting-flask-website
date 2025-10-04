@@ -2,8 +2,8 @@ services:
   web:
     build: .
     volumes:
-      - ./src:/src
-      - ./entrypoint.sh:/src/entrypoint.sh
+      # - ./src:/src
+      # - ./entrypoint.sh:/src/entrypoint.sh
       - static_volume:/src/staticfiles
       - log_files:/var/log/
     expose:
@@ -31,7 +31,7 @@ services:
       - log_files:/var/log/
     ports:
       - "80:80"
-    entrypoint: ["usr/local/bin/nginx-entrypoint.sh"]
+    entrypoint: ["sh", "/usr/local/bin/nginx-entrypoint.sh"]
 
   redis:
     image: redis:latest
